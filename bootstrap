@@ -1,0 +1,263 @@
+#!/usr/bin/env bash
+#
+# Bootstrap script for setting up a new OSX machine
+#
+# This should be idempotent so it can be run multiple times.
+#
+# Some apps don't have a cask and so still need to be installed by hand. These
+# include:
+#
+# - Twitter (app store)
+# - Postgres.app (http://postgresapp.com/)
+#
+# Notes:
+#
+# - If installing full Xcode, it's better to install that first from the app
+#   store before running the bootstrap script. Otherwise, Homebrew can't access
+#   the Xcode libraries as the agreement hasn't been accepted yet.
+#
+# Reading:
+#
+# - http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac
+# - https://gist.github.com/MatthewMueller/e22d9840f9ea2fee4716
+# - https://news.ycombinator.com/item?id=8402079
+# - http://notes.jerzygangi.com/the-best-pgp-tutorial-for-mac-os-x-ever/
+
+echo "Starting bootstrapping"
+
+# Check for Homebrew, install if we don't have it
+if test ! $(which brew); then
+  echo "Installing homebrew..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Update homebrew recipes
+brew update
+
+# Install GNU core utilities (those that come with OS X are outdated)
+brew tap homebrew/dupes
+brew install coreutils
+brew install gnu-sed --with-default-names
+brew install gnu-tar --with-default-names
+brew install gnu-indent --with-default-names
+brew install gnu-which --with-default-names
+brew install gnu-grep --with-default-names
+
+# Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
+brew install findutils
+
+# Install Bash 4
+brew install bash
+
+PACKAGES=(
+  ack
+  dnsmasq
+  git
+  locate
+  mackup
+  rename
+  terminal-notifier
+  the_silver_searcher
+  tree
+  vim
+  wget
+)
+
+echo "Installing packages..."
+brew install ${PACKAGES[@]}
+
+echo "Cleaning up..."
+brew cleanup
+
+echo "Installing cask..."
+brew install caskroom/cask/brew-cask
+
+CASKS=(
+  1password
+  adobe-creative-cloud
+  airparrot
+  airserver
+  alfred
+  apogee-duet
+  bartender
+  betterzipql
+  dash
+  docker
+  dropbox
+  evernote
+  firefox
+  flash
+  fluid
+  franz
+  geektool
+  google-chrome
+  google-drive
+  hazel
+  hyperdock
+  imageoptim
+  iterm2
+  kaleidoscope
+  keepingyouawake
+  launchcontrol
+  launchrocket
+  licecap
+  linein
+  name-mangler
+  obs
+  qlcolorcode
+  qlimagesize
+  qlmarkdown
+  qlprettypatch
+  qlstephen
+  querious
+  quicklook-csv
+  quicklook-json
+  reaper
+  rowmote-helper
+  screenflow
+  silverlight
+  skype
+  sling
+  sonos
+  spotify
+  steam
+  sublime-text-dev
+  suspicious-package
+  teamviewer
+  toggldesktop
+  torbrowser
+  transmit
+  virtualbox
+  vlc
+  webpquicklook
+  wireshark
+  xscope
+)
+
+echo "Installing cask apps..."
+brew cask install ${CASKS[@]}
+
+echo "Installing fonts..."
+brew tap caskroom/fonts
+
+FONTS=(
+  font-inconsolata-nerd-font
+  font-roboto
+  font-clear-sans
+  font-arvo
+  font-titillium-web
+  font-open-sans
+  font-lato
+)
+
+brew cask install ${FONTS[@]}
+
+echo ""
+echo "Installing global npm packages..."
+npm install marked -g
+
+echo ""
+echo "Configuring OSX..."
+
+echo ""
+echo "Set fast key repeat rate"
+defaults write NSGlobalDomain KeyRepeat -int 0
+
+echo ""
+echo "Require password as soon as screensaver or sleep mode starts"
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+echo ""
+echo "Show filename extensions by default"
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+echo ""
+echo "Disabling the warning when changing a file extension"
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+echo ""
+echo "Use column view in all Finder windows by default"
+defaults write com.apple.finder FXPreferredViewStyle Clmv
+
+echo ""
+echo "Avoiding the creation of .DS_Store files on network volumes"
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+
+echo ""
+echo "Enabling snap-to-grid for icons on the desktop and in other icon views"
+/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+
+echo ""
+echo "Setting the icon size of Dock items to 50 pixels"
+defaults write com.apple.dock tilesize -int 50
+
+echo ""
+echo "Speeding up Mission Control animations and grouping windows by application"
+defaults write com.apple.dock expose-animation-duration -float 0.1
+defaults write com.apple.dock "expose-group-by-app" -bool true
+
+echo ""
+echo "Setting Dock to auto-hide and removing the auto-hiding delay"
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0
+
+echo ""
+echo "Use scroll gesture with the Ctrl to zoom"
+defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+
+echo ""
+echo "show hidden files by default"
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
+echo ""
+echo "swipe between pages with three fingers"
+defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool true
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerHorizSwipeGesture -int 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
+
+echo ""
+echo "Enable tap to click for this user and for the login screen"
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+echo ""
+echo "Check for software updates daily, not just once per week"
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+
+echo ""
+echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in the login window"
+defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+echo ""
+echo "Empty Trash securely by default"
+defaults write com.apple.finder EmptyTrashSecurely -bool true
+
+echo ""
+echo "allow text selection in Quick Look"
+defaults write com.apple.finder QLEnableTextSelection -bool true
+
+echo ""
+echo "Enable the Develop menu and the Web Inspector in Safari"
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+echo ""
+echo "Automatically quit printer app once the print jobs complete"
+defaults write com.apple.print.PrintingPrefs “Quit When Finished” -bool true
+
+echo ""
+echo "Disable press-and-hold for keys in favor of key repeat"
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+echo ""
+echo "Custom Lock Screen Message"
+write /Library/Preferences/com.apple.loginwindow LoginwindowText "If found, please call +1 480 331 4216"
+
+echo "Bootstrapping complete"
