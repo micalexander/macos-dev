@@ -69,12 +69,7 @@ echo "Setting up dnsmasq"
 mkdir -pv $(brew --prefix)/etc/
 
 # Setup *.dev
-cat > $(brew --prefix)/etc/dnsmasq.conf <<-EOF
-listen-address=127.0.0.1
-address=/.vbox/127.0.0.1
-# keep nameserver order of resolv.conf
-strict-order
-EOF
+echo >> 'address=/.dev/127.0.0.1' > $(brew --prefix)/etc/dnsmasq.conf
 
 # Work after reboot
 sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
