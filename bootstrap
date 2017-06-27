@@ -63,6 +63,12 @@ PACKAGES=(
   wget
 )
 
+echo "Installing packages..."
+brew install ${PACKAGES[@]}
+
+echo "Cleaning up..."
+brew cleanup
+
 echo "Setting up dnsmasq"
 
 # Create config directory
@@ -86,12 +92,6 @@ sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
 echo "You might want to Add local DNS to search order in System Preferences by going to System Preferences > Network > Wi-Fi (or whatever you use) > Advanced... > DNS > add 127.0.0.1 to top of the list."
 
 echo "You can run scutil --dns to show all of your current resolvers, and you should see that all requests for a domain ending in .dev will go to the DNS server at 127.0.0.1"
-
-echo "Installing packages..."
-brew install ${PACKAGES[@]}
-
-echo "Cleaning up..."
-brew cleanup
 
 echo "Installing cask..."
 brew install caskroom/cask/brew-cask
