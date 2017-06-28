@@ -61,6 +61,7 @@ PACKAGES=(
   tree
   vim
   wget
+  neovim/neovim/neovim
 )
 
 echo "Setting up dnsmasq"
