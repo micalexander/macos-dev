@@ -95,6 +95,7 @@ echo "You can run scutil --dns to show all of your current resolvers, and you sh
 
 echo "Installing cask..."
 brew install caskroom/cask/brew-cask
+brew tap caskroom/versions
 
 CASKS=(
   1password
@@ -112,6 +113,7 @@ CASKS=(
   firefox
   flash
   fluid
+  flux
   franz
   geektool
   google-chrome
