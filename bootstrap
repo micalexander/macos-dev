@@ -50,16 +50,14 @@ brew install findutils
 brew install bash
 
 PACKAGES=(
-  ack
   dnsmasq
   git
-  locate
   mackup
   rename
   terminal-notifier
   the_silver_searcher
   tree
-  vim
+  neovim/neovim/neovim
   wget
 )
 
