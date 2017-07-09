@@ -127,6 +127,7 @@ CASKS=(
   licecap
   linein
   name-mangler
+  nylas-mail
   obs
   qlcolorcode
   qlimagesize
