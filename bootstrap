@@ -173,6 +173,7 @@ FONTS=(
   font-titillium-web
   font-open-sans
   font-lato
+  font-fontawesome
 )
 
 brew cask install ${FONTS[@]}
