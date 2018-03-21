@@ -112,7 +112,6 @@ CASKS=(
   firefox
   flash
   fluid
-  flux
   franz
   geektool
   google-chrome
@@ -128,7 +127,6 @@ CASKS=(
   licecap
   linein
   name-mangler
-  nylas-mail
   obs
   qlcolorcode
   qlimagesize
@@ -143,13 +141,10 @@ CASKS=(
   screenflow
   silverlight
   skype
-  sling
   sonos
   spotify
   steam
-  sublime-text-dev
   suspicious-package
-  teamviewer
   toggldesktop
   torbrowser
   transmit
