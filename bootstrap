@@ -56,6 +56,7 @@ PACKAGES=(
   mackup
   rename
   terminal-notifier
+  tmux
   the_silver_searcher
   tree
   wget
