@@ -103,7 +103,7 @@ CASKS=(
   airserver
   alfred
   bartender
-  betterzipql
+  betterzip
   dash
   docker
   dropbox
