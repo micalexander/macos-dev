@@ -114,7 +114,7 @@ CASKS=(
   franz
   geektool
   google-chrome
-  google-drive
+  google-drive-file-stream
   hazel
   hyperdock
   imageoptim
@@ -127,24 +127,29 @@ CASKS=(
   linein
   name-mangler
   obs
+  provisionql
   qlcolorcode
   qlimagesize
   qlmarkdown
   qlprettypatch
   qlstephen
+  qlvideo
   querious
+  quicklookapk
+  quicklookase
   quicklook-csv
   quicklook-json
+  quicklook-pat
   reaper
   rowmote-helper
   screenflow
   silverlight
   skype
-  sonos
+  sonoair
   spotify
   steam
   suspicious-package
-  toggldesktop
+  toggl
   torbrowser
   transmit
   virtualbox
