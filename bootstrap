@@ -50,6 +50,7 @@ brew install findutils
 brew install bash
 
 PACKAGES=(
+  bash-completion
   dnsmasq
   git
   fzf
